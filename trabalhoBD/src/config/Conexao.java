@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package trabalhobd.banco;
+package config;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -19,7 +19,7 @@ public class Conexao {
     private static Connection conn;
     private final static String driver = "org.postgresql.Driver";
     private final static String ip = "localhost/";
-    public static String dataBase = "teste";
+    public static String dataBase = "trabalhobd";
     public static String user = "postgres";
     public static String password = "postgres";
 
@@ -52,9 +52,7 @@ public class Conexao {
         try {
             getConexao();
             System.out.println("Feito!");
-        } catch (SQLException ex) {
-            Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(Conexao.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
