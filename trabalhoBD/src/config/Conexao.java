@@ -17,11 +17,11 @@ import java.util.logging.Logger;
 public class Conexao {
 
     private static Connection conn;
-    private final static String driver = "org.postgresql.Driver";
+    private final static String driver = "org.postgresql.Driver"; //adicionar biblioteca JDBC
     private final static String ip = "localhost/";
-    public static String dataBase = "trabalhobd";
-    public static String user = "postgres";
-    public static String password = "postgres";
+    public static String dataBase = "trabalhobd"; //alterar de acordo com o PgAdmin
+    public static String user = "postgres"; //alterar de acordo com o PgAdmin
+    public static String password = "postgres"; //alterar de acordo com o PgAdmin
 
     public Conexao(Connection conn) {
         this.conn = conn;

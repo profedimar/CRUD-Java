@@ -11,8 +11,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import model.Grupo;
 import config.Conexao;
 
@@ -22,89 +20,16 @@ import config.Conexao;
  */
 public class GrupoDAO {
 
-    public Integer adicionar(Grupo g) {
+    public boolean adicionar(Grupo g) { //alterar a classe do parâmetro
         try {
-            String sql = "INSERT INTO grupo (nome) VALUES (?)"; //alterar
+            String sql = "INSERT INTO grupo (nome) VALUES (?)"; //alterar a tabela, os atributos e o número de interrogações, conforme o número de atributos
 
-            PreparedStatement pstmt = Conexao.getConexao()
-                    .prepareStatement(sql, Statement.RETURN_GENERATED_KEYS); //não mexer
+            PreparedStatement pstmt = Conexao.getConexao().prepareStatement(sql);
+            //definindo as interrogações (uma linha para cada ? do SQL)
+            pstmt.setString(1, g.getNome()); // alterar o primeiro parâmetro indica a interrogação, começando em 1
 
-            pstmt.setString(1, g.getNome()); // alterar 1 refere-se a 1º interrogação
-
-            pstmt.executeUpdate(); // não mexer
-
-            Integer pk = null;// não mexer
-            ResultSet rs = pstmt.getGeneratedKeys(); // não mexer
-            if (rs.next()) {// não mexer
-                pk = rs.getInt(1);// não mexer
-            }// não mexer
-
-            return pk;// não mexer
-
-        } catch (SQLException | ClassNotFoundException e) {
-            System.out.println(e.getMessage());
-        }
-        return null;
-    }
-
-    public List<Grupo> selecionaTodos() {
-        String sql = "SELECT codigo, nome FROM grupo"; //alterar
-
-        try {
-            Statement stmt = Conexao.getConexao().createStatement(); //não mexer
-            ResultSet rs = stmt.executeQuery(sql); //não mexer
-            List<Grupo> lista = new ArrayList<>(); // não mexer
-
-            while (rs.next()) {
-                Grupo objeto = new Grupo(); //alterar
-
-                objeto.setCodigo(rs.getInt("codigo")); //alterar
-                objeto.setNome(rs.getString("nome"));  //alterar
-
-                lista.add(objeto); //não mexer
-            }
-            stmt.close();
-            return lista;
-
-        } catch (SQLException | ClassNotFoundException e) {
-            System.out.println(e.getMessage());
-        }
-        return null;
-    }
-
-    public Grupo selecionarObjetoPorId(Integer pk) {
-
-        String sql = " SELECT codigo, nome FROM grupo WHERE codigo = ? "; //configurar
-
-        try {
-            PreparedStatement pstmt = Conexao.getConexao().prepareStatement(sql); //não mexer
-            pstmt.setInt(1, pk); //configurar
-
-            ResultSet rs = pstmt.executeQuery(); //não mexer
-            while (rs.next()) {
-                Grupo objeto = new Grupo();
-                objeto.setCodigo(rs.getInt("codigo"));
-                objeto.setNome(rs.getString("nome"));
-                return objeto;
-            }
-            return null;
-
-        } catch (SQLException | ClassNotFoundException e) {
-            System.out.println(e.getMessage());            
-        }
-        return null;
-    }
-
-    public boolean excluir(Integer id) {
-        try {
-            String sql = " DELETE FROM grupo WHERE codigo = ? "; //alterar
-
-            PreparedStatement pstmt = Conexao.getConexao().prepareStatement(sql); //não mexer
-            pstmt.setInt(1, id); //configurar
-
-            if (pstmt.executeUpdate() == 1) {
-                return true;
-            }
+            pstmt.executeUpdate(); //executando
+            return true;
         } catch (SQLException | ClassNotFoundException e) {
             System.out.println(e.getMessage());
         }
@@ -115,10 +40,11 @@ public class GrupoDAO {
         try {
             String sql = " UPDATE grupo "
                     + "    SET nome = ? "
-                    + "  WHERE codigo = ? ";
+                    + "  WHERE codigo = ? "; //alterar tabela, atributos e chave primária
 
             PreparedStatement pstmt = Conexao.getConexao().prepareStatement(sql);
 
+            //definindo as interrogações (uma linha para cada ? do SQL)
             pstmt.setString(1, g.getNome());
             pstmt.setInt(2, g.getCodigo());
 
@@ -131,11 +57,54 @@ public class GrupoDAO {
         return false;
     }
 
+    public boolean excluir(Grupo grupo) {
+        try {
+            String sql = " DELETE FROM grupo WHERE codigo = ? "; //alterar a tabela e a chave primária no WHERE
+
+            PreparedStatement pstmt = Conexao.getConexao().prepareStatement(sql);
+            pstmt.setInt(1, grupo.getCodigo()); //alterar conforme a chave primária
+
+            if (pstmt.executeUpdate() == 1) {
+                return true;
+            }
+        } catch (SQLException | ClassNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
+
+    public List<Grupo> selecionar() {
+        String sql = "SELECT codigo, nome FROM grupo ORDER BY nome"; //alterar tabela e atributos
+
+        try {
+            Statement stmt = Conexao.getConexao().createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            List<Grupo> lista = new ArrayList<>();
+
+            while (rs.next()) {
+                Grupo objeto = new Grupo(); //alterar o nome da classe e o construtor
+
+                //setar os atributos do objeto. Cuidar o tipo dos atributos
+                objeto.setCodigo(rs.getInt("codigo")); //alterar
+                objeto.setNome(rs.getString("nome"));  //alterar
+
+                lista.add(objeto);
+            }
+            stmt.close();
+            return lista;
+
+        } catch (SQLException | ClassNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    //método só para testar
     public static void main(String[] args) {
-        Grupo g = new Grupo();
-        g.setNome("Alimentícios");
-        
-        GrupoDAO dao = new GrupoDAO();
-        dao.adicionar(g);
+        Grupo g = new Grupo(); //alterar
+        g.setNome("Alimentícios"); //alterar
+
+        GrupoDAO dao = new GrupoDAO(); //alterar
+        dao.adicionar(g); //alterar
     }
 }
