@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Grupo;
 import config.Conexao;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -103,6 +104,11 @@ public class GrupoDAO {
         objeto.setNome("Alimentícios"); //alterar
 
         GrupoDAO dao = new GrupoDAO(); //alterar
-        dao.adicionar(objeto); //alterar
+        boolean resultado = dao.adicionar(objeto); //alterar
+        if (resultado){
+            JOptionPane.showMessageDialog(null, "Inserido com sucesso!");
+        }else{
+            JOptionPane.showMessageDialog(null, "Erro!");
+        }
     }
 }

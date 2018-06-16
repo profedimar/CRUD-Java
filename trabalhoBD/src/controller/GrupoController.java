@@ -25,16 +25,16 @@ public class GrupoController {
             DefaultTableModel model = (DefaultTableModel) tabela.getModel();
 
             GrupoDAO dao = new GrupoDAO(); //alterar
-            List<Grupo> objetos = dao.selecionar();
-            Object linhas[] = new Object[2]; //alterar o índice de acordo com o número de campos exibidos 
+            List<Grupo> objetos = dao.selecionar(); //alterar
+            Object colunas[] = new Object[2]; //alterar o índice de acordo com o número de campos exibidos 
 
             if (!objetos.isEmpty()) {
                 for (Grupo objeto : objetos) {//alterar a classe
                     //alterar definir o que vai em cada linha - 1 linha para cada atributo exibido na tabela
-                    linhas[0] = objeto.getCodigo();  //alterar
-                    linhas[1] = objeto.getNome(); //alterar
+                    colunas[0] = objeto.getCodigo();  //alterar
+                    colunas[1] = objeto.getNome(); //alterar
                     
-                    model.addRow(linhas);
+                    model.addRow(colunas);
                 }
             }
         } catch (Exception e) {
@@ -51,6 +51,10 @@ public class GrupoController {
         }
     }
 
+    /**
+     * pega a linha selecionada na tabela e joga os valores no campo
+     * @param tela 
+     */
     public static void atualizaCampos(GrupoView tela) {
         int linhaSelecionada = tela.tabela.getSelectedRow();
 
