@@ -20,13 +20,13 @@ import config.Conexao;
  */
 public class GrupoDAO {
 
-    public boolean adicionar(Grupo g) { //alterar a classe do parâmetro
+    public boolean adicionar(Grupo objeto) { //alterar a classe do parâmetro
         try {
             String sql = "INSERT INTO grupo (nome) VALUES (?)"; //alterar a tabela, os atributos e o número de interrogações, conforme o número de atributos
 
             PreparedStatement pstmt = Conexao.getConexao().prepareStatement(sql);
             //definindo as interrogações (uma linha para cada ? do SQL)
-            pstmt.setString(1, g.getNome()); // alterar o primeiro parâmetro indica a interrogação, começando em 1
+            pstmt.setString(1, objeto.getNome()); // alterar o primeiro parâmetro indica a interrogação, começando em 1
 
             pstmt.executeUpdate(); //executando
             return true;
@@ -36,7 +36,7 @@ public class GrupoDAO {
         return false;
     }
 
-    public boolean alterar(Grupo g) {
+    public boolean alterar(Grupo objeto) {
         try {
             String sql = " UPDATE grupo "
                     + "    SET nome = ? "
@@ -45,28 +45,26 @@ public class GrupoDAO {
             PreparedStatement pstmt = Conexao.getConexao().prepareStatement(sql);
 
             //definindo as interrogações (uma linha para cada ? do SQL)
-            pstmt.setString(1, g.getNome());
-            pstmt.setInt(2, g.getCodigo());
+            pstmt.setString(1, objeto.getNome());
+            pstmt.setInt(2, objeto.getCodigo());
 
-            if (pstmt.executeUpdate() == 1) {
-                return true;
-            }
+            pstmt.executeUpdate(); //executando
+            return true;
         } catch (SQLException | ClassNotFoundException e) {
             System.out.println(e.getMessage());
         }
         return false;
     }
 
-    public boolean excluir(Grupo grupo) {
+    public boolean excluir(Grupo objeto) {
         try {
             String sql = " DELETE FROM grupo WHERE codigo = ? "; //alterar a tabela e a chave primária no WHERE
 
             PreparedStatement pstmt = Conexao.getConexao().prepareStatement(sql);
-            pstmt.setInt(1, grupo.getCodigo()); //alterar conforme a chave primária
+            pstmt.setInt(1, objeto.getCodigo()); //alterar conforme a chave primária
 
-            if (pstmt.executeUpdate() == 1) {
-                return true;
-            }
+            pstmt.executeUpdate();
+            return true;
         } catch (SQLException | ClassNotFoundException e) {
             System.out.println(e.getMessage());
         }
@@ -79,7 +77,7 @@ public class GrupoDAO {
         try {
             Statement stmt = Conexao.getConexao().createStatement();
             ResultSet rs = stmt.executeQuery(sql);
-            List<Grupo> lista = new ArrayList<>();
+            List<Grupo> lista = new ArrayList<>();//alterar a classe
 
             while (rs.next()) {
                 Grupo objeto = new Grupo(); //alterar o nome da classe e o construtor
@@ -101,10 +99,10 @@ public class GrupoDAO {
 
     //método só para testar
     public static void main(String[] args) {
-        Grupo g = new Grupo(); //alterar
-        g.setNome("Alimentícios"); //alterar
+        Grupo objeto = new Grupo(); //alterar
+        objeto.setNome("Alimentícios"); //alterar
 
         GrupoDAO dao = new GrupoDAO(); //alterar
-        dao.adicionar(g); //alterar
+        dao.adicionar(objeto); //alterar
     }
 }
